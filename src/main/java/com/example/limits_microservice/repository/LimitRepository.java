@@ -30,15 +30,16 @@ public interface LimitRepository extends JpaRepository<LimitEntity, Long> {
     @Query( """
             SELECT limitEntity
             FROM LimitEntity limitEntity
-            WHERE limitEntity.account.id = :accountId
+            WHERE limitEntity.userId = :userId
             AND limitEntity.id = :limitId
             """)
     Optional<LimitEntity> findLimit( @Param( "limitId" ) Long limitId,
-                                     @Param( "accountId" ) Long accountId );
+                                     @Param( "userId" ) String userId );
 
     // Retrieves the limitEntity amount for a specific limitEntity type.
     @Query( """
-            SELECT limitAmount FROM LimitEntity
+            SELECT limitAmount
+            FROM LimitEntity
             WHERE limitType = :limitType
             """ )
     Double getLimitAmountByLimitType( @Param( "limitType" ) LimitType limitType );
@@ -49,21 +50,19 @@ public interface LimitRepository extends JpaRepository<LimitEntity, Long> {
           THEN true ELSE false
           END 
           FROM LimitEntity 
-          WHERE ( :accountId IS NULL OR account.id = :userId )
+          WHERE ( :userId IS NULL OR userId = :userId )
           AND limitType = :limitType
           AND ( :category IS NULL OR category = :category )
           """ )
-    Boolean existsBy( @Param( "userId" ) Long userId,
+    Boolean existsBy( @Param( "userId" ) String userId,
                       @Param( "limitType" ) LimitType limitType,
                       @Param( "category" ) String category );
-    // Checks if a limitEntity of a specific type exists for a given account.
 
-    // Deletes limits of a specific type.
     @Modifying
     @Query( """
             DELETE 
-            FROM LimitEntity lt 
-            WHERE lt.limitType = :limitType
+            FROM LimitEntity
+            WHERE limitType = :limitType
             """ )
     void deleteByLimitType( @Param( "limitType" ) LimitType limitType );
 

@@ -74,10 +74,11 @@ public class LimitServiceImpl implements LimitService {
 
     @Override
     public void updateLimit( LimitDTO limitDTO ) {
-        Optional<LimitEntity> optimalLimit = limitRepository.findLimit( limitId, account.getId() );
+        //todo: mapper here
+        Optional<LimitEntity> optimalLimit = limitRepository.findLimit( limitDTO.getId(), getCurrentUsername() );
 
-        if ( !optimalLimit.isPresent() ) {
-            throw new NotFoundException( "Limit with ID " + limitId + " not exist!" );
+        if ( optimalLimit.isEmpty() ) {
+            throw new NotFoundException( "Limit does not exist!" );
         }
 
         if ( optimalLimit.get().getLimitType() == LimitType.ZERO ) {
@@ -94,7 +95,7 @@ public class LimitServiceImpl implements LimitService {
                 .toList();
     }
 
-    private boolean isLimitExists( String userId, LimitEntity limitEntityToCheck ) {
-        return limitRepository.existsBy( userId, limitEntityToCheck.getLimitType(), limitEntityToCheck.getCategory() );
+    private boolean isLimitExists( LimitEntity limitEntityToCheck ) {
+        return limitRepository.existsBy( getCurrentUsername(), limitEntityToCheck.getLimitType(), limitEntityToCheck.getCategory() );
     }
 }

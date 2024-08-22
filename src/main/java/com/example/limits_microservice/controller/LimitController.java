@@ -27,9 +27,9 @@ public class LimitController {
     }
 
     // Updates an existing limit.
-    @PutMapping( "/{limitId}" )
-    public void updateLimit( @PathVariable( "limitId" ) Long limitId, @RequestBody LimitDTO limitDTO ) {
-        limitServiceImpl.updateLimit( limitId, limitDTO );
+    @PutMapping()
+    public void updateLimit( @RequestBody LimitDTO limitDTO ) {
+        limitServiceImpl.updateLimit( limitDTO );
     }
 
     // Deletes an existing limit.
