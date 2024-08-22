@@ -13,6 +13,8 @@ import java.time.LocalDate;
 /**
  * Entity class representing the table of limits that can be created by users.
  */
+
+// todo: add user id
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +24,8 @@ import java.time.LocalDate;
 public class LimitEntity {
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
+    private String userId;
     @Enumerated( EnumType.STRING )
     @Column( nullable = false )
     private LimitType limitType;

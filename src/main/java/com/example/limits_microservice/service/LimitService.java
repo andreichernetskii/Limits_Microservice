@@ -11,6 +11,6 @@ public interface LimitService {
 
     void addLimit( LimitDTO limitDTO );
 
-    void updateLimit( String userId, LimitDTO limitDTO );
+    void updateLimit( Long limitId, LimitDTO limitDTO );
     List<String> getLimitTypes();
 }

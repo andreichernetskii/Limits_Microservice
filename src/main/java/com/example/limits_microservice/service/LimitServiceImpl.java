@@ -4,9 +4,13 @@ import com.example.limits_microservice.enums.LimitType;
 import com.example.limits_microservice.entity.LimitEntity;
 import com.example.limits_microservice.exception_handler.exceptions.ForbiddenException;
 import com.example.limits_microservice.exception_handler.exceptions.NotFoundException;
+import com.example.limits_microservice.exception_handler.exceptions.UserNotAuthenticatedException;
 import com.example.limits_microservice.model.LimitDTO;
 import com.example.limits_microservice.repository.LimitRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +26,22 @@ import java.util.Optional;
 public class LimitServiceImpl implements LimitService {
     private final LimitRepository limitRepository;
 
+    private String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ( authentication != null && authentication.getPrincipal() instanceof UserDetails ) {
+            return ( ( UserDetails ) authentication.getPrincipal() ).getUsername();
+        }
+
+        throw new UserNotAuthenticatedException( "User is not authorized!" );
+    }
+
     @Transactional
     @Override
     public void deleteLimit( Long limitId ) {
         Optional<LimitEntity> optionalLimit = limitRepository.findById( limitId );
 
-        if ( !optionalLimit.isPresent() ) {
+        if ( optionalLimit.isEmpty() ) {
             throw new NotFoundException( "This limit does not exist." );
         }
 
@@ -40,16 +54,18 @@ public class LimitServiceImpl implements LimitService {
 
     @Override
     public List<LimitDTO> getLimits() {
-        return limitRepository.getAllLimitsWithoutZero( account.getId() );
+        //todo: mapper here
+        return limitRepository.getAllLimitsWithoutZero( getCurrentUsername() );
     }
 
     @Override
     public void addLimit( LimitDTO limitDTO ) {
-
+        //todo: mapper here
+        String userId = getCurrentUsername();
         LimitEntity limitEntity = createLimit( limitDTO );
-        limitEntity.setAccount( account );
+        limitEntity.setUserId( userId );
 
-        if ( isLimitExists( account, limitEntity ) ) {
+        if ( isLimitExists( userId, limitEntity ) ) {
             throw new UnprocessableEntityException( "Limit already exist!" );
         }
 
@@ -57,7 +73,7 @@ public class LimitServiceImpl implements LimitService {
     }
 
     @Override
-    public void updateLimit( String userId, LimitDTO limitDTO ) {
+    public void updateLimit( LimitDTO limitDTO ) {
         Optional<LimitEntity> optimalLimit = limitRepository.findLimit( limitId, account.getId() );
 
         if ( !optimalLimit.isPresent() ) {
@@ -68,7 +84,6 @@ public class LimitServiceImpl implements LimitService {
             throw new ForbiddenException( "Cannot delete the default limit." );
         }
 
-        limitEntity.setAccount( account );
         limitRepository.save( limitEntity );
     }
 
@@ -79,7 +94,7 @@ public class LimitServiceImpl implements LimitService {
                 .toList();
     }
 
-    private boolean isLimitExists( LimitEntity limitEntityToCheck ) {
-        return limitRepository.existsBy( account.getId(), limitEntityToCheck.getLimitType(), limitEntityToCheck.getCategory() );
+    private boolean isLimitExists( String userId, LimitEntity limitEntityToCheck ) {
+        return limitRepository.existsBy( userId, limitEntityToCheck.getLimitType(), limitEntityToCheck.getCategory() );
     }
 }

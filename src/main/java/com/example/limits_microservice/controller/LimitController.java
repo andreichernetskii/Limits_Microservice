@@ -22,20 +22,20 @@ public class LimitController {
 
     // Adds a new limit.
     @PostMapping( "/" )
-    public ResponseEntity<?> addNewLimit( @RequestBody LimitDTO limitDTO ) {
-        return limitServiceImpl.addLimit( limitDTO );
+    public void addNewLimit( @RequestBody LimitDTO limitDTO ) {
+        limitServiceImpl.addLimit( limitDTO );
     }
 
     // Updates an existing limit.
     @PutMapping( "/{limitId}" )
-    public ResponseEntity<?> updateLimit( @PathVariable( "limitId" ) Long limitId, @RequestBody LimitEntity limitEntity ) {
-        return limitServiceImpl.updateLimit( limitId, limitEntity );
+    public void updateLimit( @PathVariable( "limitId" ) Long limitId, @RequestBody LimitDTO limitDTO ) {
+        limitServiceImpl.updateLimit( limitId, limitDTO );
     }
 
     // Deletes an existing limit.
     @DeleteMapping( "/{limitId}" )
-    public ResponseEntity<?> deleteLimit( @PathVariable( "limitId" ) Long limitId ) {
-        return limitServiceImpl.deleteLimit( limitId );
+    public void deleteLimit( @PathVariable( "limitId" ) Long limitId ) {
+        limitServiceImpl.deleteLimit( limitId );
     }
 
     // Gets a list of all limits.

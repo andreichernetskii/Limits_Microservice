@@ -22,9 +22,9 @@ public interface LimitRepository extends JpaRepository<LimitEntity, Long> {
             SELECT limits
             FROM LimitEntity limits
             WHERE limits.limitType != 'ZERO'
-            AND limits.account.id = :accountId
+            AND limits.account.id = :userId
             """)
-    List<LimitEntity> getAllLimitsWithoutZero( @Param( "accountId" ) Long accountId );
+    List<LimitEntity> getAllLimitsWithoutZero( @Param( "userId" ) String userId );
 
     // Retrieves a specific limitEntity associated with a given account.
     @Query( """
@@ -49,11 +49,11 @@ public interface LimitRepository extends JpaRepository<LimitEntity, Long> {
           THEN true ELSE false
           END 
           FROM LimitEntity 
-          WHERE ( :accountId IS NULL OR account.id = :accountId )
+          WHERE ( :accountId IS NULL OR account.id = :userId )
           AND limitType = :limitType
           AND ( :category IS NULL OR category = :category )
           """ )
-    Boolean existsBy( @Param( "accountId" ) Long accountId,
+    Boolean existsBy( @Param( "userId" ) Long userId,
                       @Param( "limitType" ) LimitType limitType,
                       @Param( "category" ) String category );
     // Checks if a limitEntity of a specific type exists for a given account.
