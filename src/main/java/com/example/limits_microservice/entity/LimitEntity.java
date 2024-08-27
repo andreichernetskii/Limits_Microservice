@@ -14,7 +14,6 @@ import java.time.LocalDate;
  * Entity class representing the table of limits that can be created by users.
  */
 
-// todo: add user id
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -20,7 +20,7 @@ public interface LimitRepository extends JpaRepository<LimitEntity, Long> {
             SELECT limits
             FROM LimitEntity limits
             WHERE limits.limitType != 'ZERO'
-            AND limits.account.id = :userId
+            AND limits.userId = :userId
             """)
     List<LimitEntity> getAllLimitsWithoutZero( @Param( "userId" ) String userId );
 
