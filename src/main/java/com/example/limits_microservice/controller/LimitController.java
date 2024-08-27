@@ -1,9 +1,8 @@
 package com.example.limits_microservice.controller;
 
+import com.example.limits_microservice.entity.LimitEntity;
 import com.example.limits_microservice.model.LimitDTO;
 import com.example.limits_microservice.service.LimitServiceImpl;
-import com.example.limits_microservice.entity.LimitEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class LimitController {
 
     // Gets a list of all limits.
     @GetMapping( "/" )
-    public List<LimitEntity> getLimits() {
+    public List<LimitDTO> getLimits() {
         return limitServiceImpl.getLimits();
     }
 
