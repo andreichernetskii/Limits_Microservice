@@ -1,6 +1,5 @@
 package com.example.limits_microservice.controller;
 
-import com.example.limits_microservice.entity.LimitEntity;
 import com.example.limits_microservice.model.LimitDTO;
 import com.example.limits_microservice.service.LimitServiceImpl;
 import org.springframework.web.bind.annotation.*;
