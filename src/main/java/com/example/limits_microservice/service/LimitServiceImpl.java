@@ -6,6 +6,7 @@ import com.example.limits_microservice.exception_handler.exceptions.ForbiddenExc
 import com.example.limits_microservice.exception_handler.exceptions.NotFoundException;
 import com.example.limits_microservice.exception_handler.exceptions.UnprocessableEntityException;
 import com.example.limits_microservice.exception_handler.exceptions.UserNotAuthenticatedException;
+import com.example.limits_microservice.kafka.producer.KafkaProducerService;
 import com.example.limits_microservice.mapper.LimitEntityToDtoMapper;
 import com.example.limits_microservice.model.LimitDTO;
 import com.example.limits_microservice.repository.LimitRepository;
@@ -28,6 +29,7 @@ import java.util.Optional;
 public class LimitServiceImpl implements LimitService {
     private final LimitRepository limitRepository;
     private final LimitEntityToDtoMapper mapper;
+    private final KafkaProducerService kafkaProducerService;
 
     private String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,6 +73,7 @@ public class LimitServiceImpl implements LimitService {
         }
 
         limitRepository.save( limitEntity );
+        kafkaProducerService.sendLimitDTO( limitDTO );
     }
 
     @Override

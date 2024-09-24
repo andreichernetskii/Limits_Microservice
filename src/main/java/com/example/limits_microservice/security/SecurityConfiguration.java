@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .headers( AbstractHttpConfigurer::disable )
                 .sessionManagement( session -> session.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) )
                 .addFilterBefore( authTokenFilter, UsernamePasswordAuthenticationFilter.class )
-                .authorizeHttpRequests( auth -> auth.anyRequest().authenticated() );
+                .authorizeHttpRequests( auth -> auth.anyRequest().permitAll() );
 
         return http.build();
     }
