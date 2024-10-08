@@ -21,7 +21,7 @@ public class LimitController {
     // Adds a new limit.
     @PostMapping( "/" )
     public void addNewLimit( @RequestBody LimitDTO limitDTO ) {
-        limitServiceImpl.addLimit( limitDTO );
+        limitServiceImpl.addLimitAndSendToKafka( limitDTO );
     }
 
     // Updates an existing limit.

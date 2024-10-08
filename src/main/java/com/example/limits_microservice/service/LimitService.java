@@ -9,7 +9,7 @@ public interface LimitService {
 
     List<LimitDTO> getLimits();
 
-    void addLimit( LimitDTO limitDTO );
+    void addLimitAndSendToKafka( LimitDTO limitDTO );
 
     void updateLimit( LimitDTO limitDTO );
     List<String> getLimitTypes();

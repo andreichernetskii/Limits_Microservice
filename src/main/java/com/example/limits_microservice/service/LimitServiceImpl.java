@@ -64,9 +64,9 @@ public class LimitServiceImpl implements LimitService {
     }
 
     @Override
-    public void addLimit( LimitDTO limitDTO ) {
+    public void addLimitAndSendToKafka( LimitDTO limitDTO ) {
+        limitDTO.setUserId( getCurrentUsername() );
         LimitEntity limitEntity = mapper.limitDtoToEntity( limitDTO );
-        limitEntity.setUserId( getCurrentUsername() );
 
         if ( isLimitExists( limitEntity ) ) {
             throw new UnprocessableEntityException( "Limit already exist!" );

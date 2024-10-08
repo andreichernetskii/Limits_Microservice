@@ -18,7 +18,7 @@ public class KafkaProducerService {
     private static final Logger logger = LoggerFactory.getLogger( KafkaProducerService.class );
     private final KafkaTemplate<String, LimitDTO> limitDTOKafkaTemplate;
 
-    @Value( value = "${kafka.producer.group1}" )
+    @Value( value = "${kafka.producer.topic1}" )
     private String limitDTOTopicName;
 
     public void sendLimitDTO( LimitDTO limitDTO ) {

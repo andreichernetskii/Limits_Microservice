@@ -15,7 +15,7 @@ public class KafkaConsumerService {
     private final PublicKeyVault publicKeyVault;
 
     @KafkaListener( topics = "public_key_distribution",
-            groupId = "${public-key-consumer}",
+            groupId = "${kafka.consumer.group1}",
             containerFactory = "publicKeyListenerContainerFactory" )
     public void listen( String publicKey ) {
         publicKeyVault.convertStringToPublicKey( publicKey );
